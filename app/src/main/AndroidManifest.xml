@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -27,18 +29,19 @@
             </intent-filter>
         </activity>
 
+        <!-- The below code is for android OS version below N -->
         <receiver
-            android:name=".InstallReceiver"
+            android:name="com.example.ComposeExampleApp.ConnectivityReceiver"
             android:enabled="true"
-            android:exported="false"
-           >
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.example.ACTION_MY_BROADCAST" />
-                <!-- Add more actions if needed -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
-
+        <service
+            android:name="com.example.ComposeExampleApp.ForegroundService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
