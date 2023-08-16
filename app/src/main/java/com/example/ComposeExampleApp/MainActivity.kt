@@ -1,5 +1,6 @@
 package com.example.ComposeExampleApp
 
+import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
@@ -32,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : ComponentActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
@@ -42,18 +42,17 @@ class MainActivity : ComponentActivity(), ConnectivityReceiver.ConnectivityRecei
     }
 
 
-    private var snackBar: Snackbar? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpBroadcastReceiver()
         setContent {
-            mainView()
+            mainView(this)
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun mainView() {
+    private fun mainView(activity: Activity) {
         var email by remember { mutableStateOf("") }
         MaterialTheme {
             Column(
@@ -94,7 +93,9 @@ class MainActivity : ComponentActivity(), ConnectivityReceiver.ConnectivityRecei
                 }) {
                     Text(text = "Stop Service")
                 }
-
+                checkNotificationPermeation(activity = activity) {
+                    startService()
+                }
             }
         }
     }
@@ -127,14 +128,22 @@ class MainActivity : ComponentActivity(), ConnectivityReceiver.ConnectivityRecei
         //Start service:
         //Start service:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+
             serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
             startForegroundService(Intent(this, ForegroundService::class.java))
+
+
         } else {
-            startService(Intent(this, ForegroundService::class.java))
+
+            serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
+            startService(serviceIntent)
+
+
         }
     }
 
-    fun stopService() {
+    private fun stopService() {
         val serviceIntent = Intent(this, ForegroundService::class.java)
         stopService(serviceIntent)
     }
