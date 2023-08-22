@@ -1,4 +1,4 @@
-package com.example.ComposeExampleApp
+package com.example.ComposeExampleApp.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,13 +12,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import com.example.ComposeExampleApp.ui.theme.MainActivityViewModel
 import com.raywenderlich.android.composableCookBook.RecipeList
 import com.raywenderlich.android.composableCookBook.defaultRecipes
 
 
 class MainActivity : ComponentActivity() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,11 @@ class MainActivity : ComponentActivity() {
                     RecipeList(defaultRecipes)
                 }
             }
+
+                 mainActivityViewModel.getUserInfo(this)
+
         }
+
     }
 }
 
